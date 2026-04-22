@@ -5,6 +5,7 @@ from rdflib import Graph
 from payload2rdf.warc_reader import extract_html_records
 from payload2rdf.extract import extract_metadata
 from payload2rdf.mapping import load_mapping, map_metadata_to_graph, NAMESPACES
+from loguru import logger
 
 @click.command()
 @click.argument('warc_file', type=click.Path(exists=True))
@@ -16,8 +17,8 @@ def cli(warc_file, mapping_file, format):
         metadata = extract_metadata(url, html)
         graph = Graph()
         map_metadata_to_graph(graph, url, metadata, mapping, NAMESPACES)
-        print(f"\n# RDF für {url}")
-        print(graph.serialize(format=format))
+        logger.debug(f"# RDF for {url}")
+        logger.debug(graph.serialize(format=format))
 
 if __name__ == '__main__':
     cli()

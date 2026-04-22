@@ -7,10 +7,20 @@ from payload2rdf.extract import extract_metadata
 from payload2rdf.mapping import load_mapping, map_metadata_to_graph, NAMESPACES
 from loguru import logger
 
+
 @click.command()
-@click.argument('warc_file', type=click.Path(exists=True))
-@click.option('--mapping-file', type=click.Path(exists=True), default='mappings.yaml', help='YAML-Datei mit den Mapping-Regeln')
-@click.option('--format', default='turtle', help='RDF-Serialisierungsformat (z. B. turtle, xml, n3)')
+@click.argument("warc_file", type=click.Path(exists=True))
+@click.option(
+    "--mapping-file",
+    type=click.Path(exists=True),
+    default="mappings.yaml",
+    help="YAML-Datei mit den Mapping-Regeln",
+)
+@click.option(
+    "--format",
+    default="turtle",
+    help="RDF-Serialisierungsformat (z. B. turtle, xml, n3)",
+)
 def cli(warc_file, mapping_file, format):
     mapping = load_mapping(mapping_file)
     for url, html in extract_html_records(warc_file):
@@ -20,5 +30,6 @@ def cli(warc_file, mapping_file, format):
         logger.debug(f"# RDF for {url}")
         logger.debug(graph.serialize(format=format))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     cli()

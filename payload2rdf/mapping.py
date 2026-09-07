@@ -1,5 +1,5 @@
 import yaml
-from rdflib import URIRef, Literal
+from rdflib import Literal, URIRef
 from rdflib.namespace import DC, DCTERMS, FOAF, Namespace
 
 NAMESPACES = {
@@ -25,7 +25,9 @@ def get_nested_value(data, key_path):
     return data
 
 
-def map_metadata_to_graph(graph, uri, metadata_dict, mapping, namespace_map: dict = NAMESPACES):
+def map_metadata_to_graph(
+    graph, uri, metadata_dict, mapping, namespace_map: dict = NAMESPACES
+):
     page_uri = URIRef(uri)
 
     for syntax, rules in mapping.items():

@@ -1,9 +1,10 @@
 import click
+from loguru import logger
 from rdflib import Graph
-from payload2rdf.warc_reader import extract_html_records
+
 from payload2rdf.extract import extract_metadata
 from payload2rdf.mapping import load_mapping, map_metadata_to_graph
-from loguru import logger
+from payload2rdf.warc_reader import extract_html_records
 
 
 @click.command()

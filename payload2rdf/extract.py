@@ -1,20 +1,24 @@
+from bs4 import BeautifulSoup
 from extruct import extract
 from w3lib.html import get_base_url
-from bs4 import BeautifulSoup
 
 
 def extract_metadata(url, html):
     base_url = get_base_url(html, url)
 
     # Extruct: strukturierte Metadaten
-    metadata = extract(
-        html,
-        base_url=base_url,
-    ) or {}
+    metadata = (
+        extract(
+            html,
+            base_url=base_url,
+        )
+        or {}
+    )
 
     metadata["html"] = [dict(extract_html_metadata(html))]
 
     return metadata
+
 
 def extract_html_metadata(html):
     """Extract basic metadata from HTML documents encoded in the lang attribute, title tag and common meta-tags."""
@@ -35,6 +39,7 @@ def extract_html_metadata(html):
         yield "description", description
     if author:
         yield "author", author
+
 
 def get_meta_tag(soup, name: str):
     """Get a meta-tags content attributes value."""

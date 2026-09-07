@@ -1,5 +1,5 @@
-from warcio.archiveiterator import ArchiveIterator
 from loguru import logger
+from warcio.archiveiterator import ArchiveIterator
 
 
 def extract_html_records(warc_path):
@@ -29,5 +29,7 @@ def extract_html_records(warc_path):
                     if not payload.strip():
                         # skip empty documents
                         continue
-                    logger.debug(f"Content of {url[:80]}...\n{payload[:300]}\n{'-' * 50}")
+                    logger.debug(
+                        f"Content of {url[:80]}...\n{payload[:300]}\n{'-' * 50}"
+                    )
                     yield url, payload

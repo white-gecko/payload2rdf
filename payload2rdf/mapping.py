@@ -1,8 +1,13 @@
-# payload2rdf/mapping.py
-
 import yaml
 from rdflib import URIRef, Literal
 from rdflib.namespace import DC, DCTERMS, FOAF, Namespace
+
+NAMESPACES = {
+    "dc": DC,
+    "dcterms": DCTERMS,
+    "foaf": FOAF,
+    "schema": Namespace("http://schema.org/"),
+}
 
 
 def load_mapping(yaml_path):
@@ -36,11 +41,3 @@ def map_metadata_to_graph(graph, uri, metadata_dict, mapping, namespace_map):
                         target_uri.split(":")[1]
                     ]
                     graph.add((page_uri, predicate, Literal(value)))
-
-
-NAMESPACES = {
-    "dc": DC,
-    "dcterms": DCTERMS,
-    "foaf": FOAF,
-    "schema": Namespace("http://schema.org/"),
-}

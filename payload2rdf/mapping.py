@@ -25,7 +25,7 @@ def get_nested_value(data, key_path):
     return data
 
 
-def map_metadata_to_graph(graph, uri, metadata_dict, mapping, namespace_map):
+def map_metadata_to_graph(graph, uri, metadata_dict, mapping, namespace_map: dict = NAMESPACES):
     page_uri = URIRef(uri)
 
     for syntax, rules in mapping.items():

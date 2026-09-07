@@ -2,7 +2,7 @@ import click
 from rdflib import Graph
 from payload2rdf.warc_reader import extract_html_records
 from payload2rdf.extract import extract_metadata
-from payload2rdf.mapping import load_mapping, map_metadata_to_graph, NAMESPACES
+from payload2rdf.mapping import load_mapping, map_metadata_to_graph
 from loguru import logger
 
 
@@ -34,7 +34,7 @@ def cli(warc_file, mapping_file, rdf_format):
     for url, html in extract_html_records(warc_file):
         metadata = extract_metadata(url, html)
         record_graph = Graph()
-        map_metadata_to_graph(record_graph, url, metadata, mapping, NAMESPACES)
+        map_metadata_to_graph(record_graph, url, metadata, mapping)
         logger.debug(f"# RDF for {url}")
         logger.debug(record_graph.serialize(format=rdf_format))
         graph += record_graph

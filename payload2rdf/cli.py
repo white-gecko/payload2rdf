@@ -1,5 +1,3 @@
-# payload2rdf/cli.py
-
 import click
 from rdflib import Graph
 from payload2rdf.warc_reader import extract_html_records
@@ -18,17 +16,30 @@ from loguru import logger
 )
 @click.option(
     "--format",
+    "-f",
+    "rdf_format",
     default="turtle",
-    help="RDF-Serialisierungsformat (z. B. turtle, xml, n3)",
+    show_default=True,
+    type=click.Choice(["xml", "turtle", "nt", "n3"], case_sensitive=False),
+    help="Optional RDF serialization format.",
 )
-def cli(warc_file, mapping_file, format):
+def cli(warc_file, mapping_file, rdf_format):
+    """Extract metdata as RDF from a WARC file for each record using specified mapping rules.
+
+    This command processes a WARC file, extracts metadata from the payload of each record, and maps the metadata to RDF using the provided mapping configuration.
+    The resulting RDF graph is serialized in the specified format.
+    """
     mapping = load_mapping(mapping_file)
+    graph = Graph()
     for url, html in extract_html_records(warc_file):
         metadata = extract_metadata(url, html)
-        graph = Graph()
-        map_metadata_to_graph(graph, url, metadata, mapping, NAMESPACES)
+        record_graph = Graph()
+        map_metadata_to_graph(record_graph, url, metadata, mapping, NAMESPACES)
         logger.debug(f"# RDF for {url}")
-        logger.debug(graph.serialize(format=format))
+        logger.debug(record_graph.serialize(format=rdf_format))
+        graph += record_graph
+
+    print(graph.serialize(format=rdf_format))
 
 
 if __name__ == "__main__":

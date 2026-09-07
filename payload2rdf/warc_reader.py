@@ -2,7 +2,7 @@ from loguru import logger
 from warcio.archiveiterator import ArchiveIterator
 
 
-def extract_html_records(warc_path):
+def extract_html_records(warc_path, record_id):
     """
     Extract HTML records from a WARC file.
 
@@ -17,6 +17,8 @@ def extract_html_records(warc_path):
     """
     with open(warc_path, "rb") as stream:
         for record in ArchiveIterator(stream):
+            if record_id and not record.rec_headers["WARC-Record-ID"] == record_id:
+                continue
             if record.rec_type not in ["response", "resource"]:
                 continue
             if "application/http" in record.content_type and record.http_headers:

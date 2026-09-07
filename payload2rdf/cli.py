@@ -24,7 +24,13 @@ from payload2rdf.warc_reader import extract_html_records
     type=click.Choice(["xml", "turtle", "nt", "n3"], case_sensitive=False),
     help="Optional RDF serialization format.",
 )
-def cli(warc_file, mapping_file, rdf_format):
+@click.option(
+    "--record",
+    "-r",
+    default=None,
+    help="Optional Provide the WARC-Record-ID of a record and only extract its metadata",
+)
+def cli(warc_file, mapping_file, rdf_format, record = None):
     """Extract metdata as RDF from a WARC file for each record using specified mapping rules.
 
     This command processes a WARC file, extracts metadata from the payload of each record, and maps the metadata to RDF using the provided mapping configuration.
@@ -32,7 +38,7 @@ def cli(warc_file, mapping_file, rdf_format):
     """
     mapping = load_mapping(mapping_file)
     graph = Graph()
-    for url, html in extract_html_records(warc_file):
+    for url, html in extract_html_records(warc_file, record):
         metadata = extract_metadata(url, html)
         record_graph = Graph()
         map_metadata_to_graph(record_graph, url, metadata, mapping)

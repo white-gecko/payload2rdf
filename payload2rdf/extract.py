@@ -1,4 +1,4 @@
-import extruct
+from extruct import extract
 from w3lib.html import get_base_url
 from bs4 import BeautifulSoup
 
@@ -7,28 +7,36 @@ def extract_metadata(url, html):
     base_url = get_base_url(html, url)
 
     # Extruct: strukturierte Metadaten
-    metadata = extruct.extract(
+    metadata = extract(
         html,
         base_url=base_url,
-        syntaxes=["json-ld", "microdata", "opengraph", "rdfa", "microformat"],
-    )
+    ) or {}
 
-    # Fallback: einfache <title> + <meta name="description">
-    fallback = extract_fallback_metadata(html)
-    metadata["fallback"] = [
-        fallback
-    ]  # in eine Liste verpacken, um Mapping-Logik zu matchen
+    metadata["html"] = [dict(extract_html_metadata(html))]
 
     return metadata
 
-
-def extract_fallback_metadata(html):
+def extract_html_metadata(html):
+    """Extract basic metadata from HTML documents encoded in the lang attribute, title tag and common meta-tags."""
     soup = BeautifulSoup(html, "html.parser")
-    title = soup.title.string.strip() if soup.title and soup.title.string else None
-    description = soup.find("meta", attrs={"name": "description"})
-    return {
-        "title": title,
-        "description": description["content"].strip()
-        if description and description.has_attr("content")
-        else None,
-    }
+    lang = soup.get("lang")
+    title = soup.title.string if soup.title and soup.title.string else None
+    keywords = list(get_meta_tag(soup, "keywords"))
+    description = list(get_meta_tag(soup, "description"))
+    author = list(get_meta_tag(soup, "author"))
+
+    if lang:
+        yield "lang", lang
+    if title:
+        yield "title", title
+    if keywords:
+        yield "keywords", keywords
+    if description:
+        yield "description", description
+    if author:
+        yield "author", author
+
+def get_meta_tag(soup, name: str):
+    """Get a meta-tags content attributes value."""
+    for element in soup.find_all("meta", attrs={"name": "name"}):
+        yield element["content"]

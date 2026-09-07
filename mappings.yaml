@@ -17,6 +17,8 @@ rdfa:
   headline: schema:headline
   dateModified: dcterms:modified
 
-fallback:
+html:
   title: dc:title
   description: dc:description
+  author: dc:creator
+

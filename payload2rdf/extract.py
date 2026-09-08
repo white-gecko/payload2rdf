@@ -4,6 +4,19 @@ from w3lib.html import get_base_url
 
 
 def extract_metadata(url, html):
+    """
+    Extract metadata from HTML content.
+
+    This function uses the extruct library to extract structured metadata from HTML content.
+    It also extracts basic HTML metadata such as language, title, keywords, description, and author.
+
+    Args:
+        url (str): The URL of the HTML content.
+        html (str): The HTML content to extract metadata from.
+
+    Returns:
+        dict: A dictionary containing the extracted metadata.
+    """
     base_url = get_base_url(html, url)
 
     # Extruct: strukturierte Metadaten
@@ -42,6 +55,17 @@ def extract_html_metadata(html):
 
 
 def get_meta_tag(soup, name: str):
-    """Get a meta-tags content attributes value."""
+    """
+    Get the content attribute value of a meta tag.
+
+    This function searches for meta tags with a specific name attribute and yields their content values.
+
+    Args:
+        soup (BeautifulSoup): The BeautifulSoup object representing the HTML content.
+        name (str): The name attribute value to search for in meta tags.
+
+    Yields:
+        str: The content attribute value of the meta tag.
+    """
     for element in soup.find_all("meta", attrs={"name": "name"}):
         yield element["content"]

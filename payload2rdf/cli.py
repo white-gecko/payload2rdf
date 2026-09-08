@@ -38,7 +38,7 @@ def cli(warc_file, mapping_file, rdf_format, record=None):
     graph = Graph()
     with open(warc_file, "rb") as warc_file_stream:
         for record_id, uri, record_graph in payload2rdf(
-            warc_file_stream, load_mapping(mapping_file), record
+            warc_file_stream, record, load_mapping(mapping_file)
         ):
             logger.debug(f"# RDF for {uri} from {record_id}")
             logger.debug(record_graph.serialize(format=rdf_format))

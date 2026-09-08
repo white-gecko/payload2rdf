@@ -53,7 +53,7 @@ def get_nested_value(data, key_path):
 
 
 def map_metadata_to_graph(
-    graph, uri, metadata_dict, mapping, namespace_map: dict = NAMESPACES
+    graph, uri, metadata_dict, mapping=None, namespace_map: dict = NAMESPACES
 ):
     """
     Map metadata to an RDF graph using specified mapping rules.
@@ -72,6 +72,9 @@ def map_metadata_to_graph(
         None
     """
     page_uri = URIRef(uri)
+
+    if not mapping:
+        mapping = load_mapping()
 
     for syntax, rules in mapping.items():
         if syntax not in metadata_dict:

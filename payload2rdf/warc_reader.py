@@ -17,7 +17,7 @@ def extract_html_records(warc_path, record_id):
     """
     with open(warc_path, "rb") as stream:
         for record in ArchiveIterator(stream):
-            if record_id and not record.rec_headers["WARC-Record-ID"] == record_id:
+            if record_id and record.rec_headers["WARC-Record-ID"] != record_id:
                 continue
             if record.rec_type not in ["response", "resource"]:
                 continue

@@ -3,7 +3,8 @@ name = "payload2rdf"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "FabioKn",email = "fabio.knoess@t-online.de"}
+    {name = "FabioKn",email = "fabio.knoess@t-online.de"},
+    {name = "Natanael Arndt",email = "arndtn@gmail.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.13,<4.0.0"
@@ -30,3 +31,14 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 payload2rdf = "payload2rdf.cli:cli"
 
+
+[dependency-groups]
+s3 = [
+    "s3fs (>=2026.7.0,<2027.0.0)"
+]
+dev = [
+    "ruff (>=0.16.6,<0.17.0)"
+]
+
+[tool.poetry.group.s3]
+optional = true

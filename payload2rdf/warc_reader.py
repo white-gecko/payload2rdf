@@ -16,10 +16,12 @@ def extract_html_records(
 
     Args:
         warc_file_stream (binary stream): The opened WARC file or a binary stream to be processed
-        record_id (str): optionally a record_id,
+        record_id (str): optionally a record_id, to identify an exact record. It needs to be specified
+                         in the same way as in the WARC file, i.e. including the angular brackets,
+                         e.g. `<urn:uuid:31ee6876-e5a5-4d4d-86e5-3839a49290f5>`
 
     Yields:
-        warcio.recordreader.ArcRecord: HTML records from the WARC file
+        uri, payload (tuple[str, str]): the WARC-Target-URI and the HTML payload of the record
     """
     final = False
     for record in ArchiveIterator(warc_file_stream):
@@ -38,9 +40,9 @@ def extract_html_records(
                 payload = (
                     record.content_stream().read().decode("utf-8", errors="ignore")
                 )
-                url = record.rec_headers.get_header("WARC-Target-URI")
+                uri = record.rec_headers.get_header("WARC-Target-URI")
                 if not payload.strip():
                     # skip empty documents
                     continue
-                logger.debug(f"Content of {url[:80]}...\n{payload[:300]}\n{'-' * 50}")
-                yield url, payload
+                logger.debug(f"Content of {uri[:80]}...\n{payload[:300]}\n{'-' * 50}")
+                yield uri, payload

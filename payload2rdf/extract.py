@@ -1,9 +1,12 @@
+from collections.abc import Iterator
+from typing import Any
+
 from bs4 import BeautifulSoup
 from extruct import extract
 from w3lib.html import get_base_url
 
 
-def extract_metadata(url, html):
+def extract_metadata(url: str, html: str) -> dict[str, list[dict[str, Any]]]:
     """
     Extract metadata from HTML content.
 
@@ -33,7 +36,7 @@ def extract_metadata(url, html):
     return metadata
 
 
-def extract_html_metadata(html):
+def extract_html_metadata(html: str) -> Iterator[tuple[str, Any]]:
     """Extract basic metadata from HTML documents encoded in the lang attribute, title tag and common meta-tags."""
     soup = BeautifulSoup(html, "html.parser")
     lang = soup.get("lang")
@@ -54,7 +57,7 @@ def extract_html_metadata(html):
         yield "author", author
 
 
-def get_meta_tag(soup, name: str):
+def get_meta_tag(soup: BeautifulSoup, name: str) -> Iterator[str]:
     """
     Get the content attribute value of a meta tag.
 

@@ -1,11 +1,17 @@
+from typing import BinaryIO
+
 from rdflib import Graph
 
 from .extract import extract_metadata
-from .mapping import map_metadata_to_graph
+from .mapping import MappingType, map_metadata_to_graph
 from .warc_reader import read_html_payload
 
 
-def payload2rdf(warc_file_stream, select_record_id=None, mapping=None):
+def payload2rdf(
+    warc_file_stream: BinaryIO,
+    select_record_id: str | None = None,
+    mapping: MappingType | None = None,
+):
     """
     Convert WARC file payloads to RDF graphs.
 

@@ -45,5 +45,7 @@ def read_html_payload(
                 if not payload.strip():
                     # skip empty documents
                     continue
-                logger.debug(f"Content of {target_uri[:80]}...\n{payload[:300]}\n{'-' * 50}")
+                logger.debug(
+                    f"Content of {target_uri[:80]}...\n{payload[:300]}\n{'-' * 50}"
+                )
                 yield record_id, target_uri, payload

@@ -1,8 +1,11 @@
 from importlib import resources
+from typing import Any
 
 import yaml
-from rdflib import Literal, URIRef
-from rdflib.namespace import DC, DCTERMS, FOAF, Namespace
+from rdflib import Graph, Literal, URIRef
+from rdflib.namespace import DC, DCTERMS, FOAF, DefinedNamespace, Namespace
+
+MappingType = dict[str, dict[str, str]]
 
 NAMESPACES = {
     "dc": DC,
@@ -12,7 +15,7 @@ NAMESPACES = {
 }
 
 
-def load_mapping(yaml_path=None):
+def load_mapping(yaml_path: str | None = None) -> MappingType:
     """
     Load mapping rules from a YAML file.
 
@@ -30,7 +33,7 @@ def load_mapping(yaml_path=None):
         return yaml.safe_load(f)
 
 
-def get_nested_value(data, key_path):
+def get_nested_value(data: dict[str, Any], key_path: str) -> Any:
     """
     Get a nested value from a dictionary using a key path.
 
@@ -53,8 +56,12 @@ def get_nested_value(data, key_path):
 
 
 def map_metadata_to_graph(
-    graph, uri, metadata_dict, mapping=None, namespace_map: dict = NAMESPACES
-):
+    graph: Graph,
+    uri: str,
+    metadata_dict: dict[str, Any],
+    mapping: MappingType | None = None,
+    namespace_map: dict[str, Namespace | DefinedNamespace] = NAMESPACES,
+) -> None:
     """
     Map metadata to an RDF graph using specified mapping rules.
 

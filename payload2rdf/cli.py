@@ -29,7 +29,12 @@ from .payload2rdf import payload2rdf
     default=None,
     help="Optional Provide the WARC-Record-ID (as it is written in the WARC file) of a record and only extract its metadata",
 )
-def cli(warc_file, mapping_file, rdf_format, record=None):
+def cli(
+    warc_file: str,
+    rdf_format: str,
+    mapping_file: str | None = None,
+    record: str | None = None,
+):
     """Extract metdata as RDF from a WARC file for each record using specified mapping rules.
 
     This command processes a WARC file, extracts metadata from the payload of each record, and maps the metadata to RDF using the provided mapping configuration.

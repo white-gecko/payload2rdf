@@ -38,13 +38,14 @@ def cli(warc_file, mapping_file, rdf_format, record = None):
     """
     mapping = load_mapping(mapping_file)
     graph = Graph()
-    for url, html in extract_html_records(warc_file, record):
-        metadata = extract_metadata(url, html)
-        record_graph = Graph()
-        map_metadata_to_graph(record_graph, url, metadata, mapping)
-        logger.debug(f"# RDF for {url}")
-        logger.debug(record_graph.serialize(format=rdf_format))
-        graph += record_graph
+    with open(warc_file, "rb") as warc_file_stream:
+        for url, html in extract_html_records(warc_file_stream, record):
+            metadata = extract_metadata(url, html)
+            record_graph = Graph()
+            map_metadata_to_graph(record_graph, url, metadata, mapping)
+            logger.debug(f"# RDF for {url}")
+            logger.debug(record_graph.serialize(format=rdf_format))
+            graph += record_graph
 
     print(graph.serialize(format=rdf_format))
 

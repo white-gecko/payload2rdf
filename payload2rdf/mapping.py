@@ -1,3 +1,5 @@
+from importlib import resources
+
 import yaml
 from rdflib import Literal, URIRef
 from rdflib.namespace import DC, DCTERMS, FOAF, Namespace
@@ -10,7 +12,9 @@ NAMESPACES = {
 }
 
 
-def load_mapping(yaml_path):
+def load_mapping(yaml_path=None):
+    if not yaml_path:
+        yaml_path = resources.files("payload2rdf").joinpath("mappings.yaml")
     with open(yaml_path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 

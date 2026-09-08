@@ -28,7 +28,7 @@ from payload2rdf.warc_reader import extract_html_records
     "--record",
     "-r",
     default=None,
-    help="Optional Provide the WARC-Record-ID of a record and only extract its metadata",
+    help="Optional Provide the WARC-Record-ID (as it is written in the WARC file) of a record and only extract its metadata",
 )
 def cli(warc_file, mapping_file, rdf_format, record = None):
     """Extract metdata as RDF from a WARC file for each record using specified mapping rules.

@@ -4,7 +4,7 @@ from rdflib import Graph
 
 from payload2rdf.extract import extract_metadata
 from payload2rdf.mapping import load_mapping, map_metadata_to_graph
-from payload2rdf.warc_reader import extract_html_records
+from payload2rdf.warc_reader import read_html_payload
 
 
 @click.command()
@@ -39,7 +39,7 @@ def cli(warc_file, mapping_file, rdf_format, record = None):
     mapping = load_mapping(mapping_file)
     graph = Graph()
     with open(warc_file, "rb") as warc_file_stream:
-        for url, html in extract_html_records(warc_file_stream, record):
+        for _, url, html in read_html_payload(warc_file_stream, record):
             metadata = extract_metadata(url, html)
             record_graph = Graph()
             map_metadata_to_graph(record_graph, url, metadata, mapping)
